@@ -1,39 +1,23 @@
-FROM centos:centos7
+FROM base1/centos7
 MAINTAINER Wu
 
-#
+# ENV varables.
 ENV http_proxy=http://web-proxy.sgp.hpecorp.net:8080
 ENV https_proxy=http://web-proxy.sgp.hpecorp.net:8080
-ENV WORKDIR=/tmp/storm
-RUN mkdir $WORKDIR
+ENV WORKDIR=/tmp/ebc
 WORKDIR $WORKDIR
 
-#install wget and get the tarball.
-RUN yum -y install wget
+# get the tarball.
 
-# install getopt,ksh
-# used by install-uca-ebc.sh,so install them in advance.
-RUN yum -y install util-linux
-RUN yum -y install ksh
-# install initscripts for umb zookeeper 
-RUN yum install -y initscripts
+RUN wget http://www-us.apache.org/dist/zookeeper/zookeeper-3.4.12/zookeeper-3.4.12.tar.gz -P $WORKDIR
+RUN wget http://www-us.apache.org/dist/kafka/1.1.0/kafka_2.11-1.1.0.tgz -P $WORKDIR
+# unzip the tarball
+RUN tar -xvf $WORKDIR/zookeeper-3.4.12.tar.gz -C $WORKDIR
+RUN tar -xvf $WORKDIR/kafka_2.11-1.1.0.tgz -C $WORKDIR
 
-# install open jdk
-RUN yum -y install java-1.7.0-openjdk-devel.x86_64
-RUN yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel 
+# install ebc
+# execuable
+# update file .bashrc for ebc environment var for bash
+# 
 
-# add user storm
-RUN useradd storm -s /bin/bash
-RUN useradd wu -s /bin/bash
-# install necessary common tools?
-RUN yum -y install unzip
-RUN yum -y install which 
-RUN yum -y install openssh-clients
-RUN yum -y install telnet
-RUN yum -y install expect
-RUN yum -y install sshpass
-
-#LANG is missing?
-RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
-
-#docker build --force-rm=true -t base/centos7
+EXPOSE 1-65535
