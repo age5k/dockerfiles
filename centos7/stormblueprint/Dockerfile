@@ -11,9 +11,11 @@ WORKDIR $WORKDIR
 
 RUN wget http://www-us.apache.org/dist/zookeeper/zookeeper-3.4.12/zookeeper-3.4.12.tar.gz -P $WORKDIR
 RUN wget http://www-us.apache.org/dist/kafka/1.1.0/kafka_2.11-1.1.0.tgz -P $WORKDIR
+RUN wget http://www.igniterealtime.org/downloads/download-landing.jsp?file=openfire/openfire_4_2_3.tar.gz -P $WORKDIR
 # unzip the tarball
 RUN tar -xvf $WORKDIR/zookeeper-3.4.12.tar.gz -C $WORKDIR
 RUN tar -xvf $WORKDIR/kafka_2.11-1.1.0.tgz -C $WORKDIR
+RUN tar -xvf $WORKDIR/download-landing.jsp?file=openfire/openfire_4_2_3.tar.gz
 
 # install ebc
 # execuable
