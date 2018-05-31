@@ -25,9 +25,11 @@ RUN yum install -y initscripts
 RUN yum -y install java-1.7.0-openjdk-devel.x86_64
 RUN yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel 
 
-# add user storm
+# add user storm and wu
 RUN useradd storm -s /bin/bash
+RUN usermod -a -G wheel storm
 RUN useradd wu -s /bin/bash
+RUN usermod -a -G wheel wu
 # install necessary common tools?
 RUN yum -y install unzip
 RUN yum -y install which 
