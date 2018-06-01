@@ -37,8 +37,8 @@ RUN yum -y install openssh-clients
 RUN yum -y install telnet
 RUN yum -y install expect
 RUN yum -y install sshpass
-
+RUN yum -y install net-tools
 #LANG is missing?
 RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 
-#docker build --force-rm=true -t base1/centos7 ./
+#docker build --force-rm=true -t centos7/base1 ./
