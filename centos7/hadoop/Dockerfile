@@ -19,13 +19,13 @@ RUN wget http://www-us.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/ha
 # unzip package
 RUN tar -xvf $WORKDIR/hadoop-${HADOOP_VERSION}.tar.gz -C $WORKDIR
 RUN mkdir /home/$USER_NAME/opt
-RUN move $WORKDIR/hadoop-${HADOOP_VERSION} /home/$USER_NAME/opt
+RUN mv $WORKDIR/hadoop-${HADOOP_VERSION} /home/$USER_NAME/opt
 RUN chown -R $USER_NAME /home/$USER_NAME/opt
 RUN chgrp -R $USER_NAME /home/$USER_NAME/opt
 
 RUN ln -s /home/$USER_NAME/opt/hadoop-${HADOOP_VERSION} /home/$USER_NAME/opt/hadoop
 
-RUN echo 'export HADOOP_HOME=~/hadoop' | tee -a /home/$USER_NAME_.bashrc
+RUN echo 'export HADOOP_HOME=~/opt/hadoop' | tee -a /home/$USER_NAME.bashrc
 RUN echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' | tee -a /home/$USER_NAME/.bashrc
 
 EXPOSE 1-65535
