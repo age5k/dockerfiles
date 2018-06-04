@@ -54,3 +54,8 @@ RUN echo 'https_proxy=http://web-proxy.sgp.hpecorp.net:8080' | tee -a /etc/profi
 
 
 #docker build --force-rm=true -t centos7/base1 ./
+RUN yum -y install net-tools
+#LANG is missing?
+RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
+
+#docker build --force-rm=true -t centos7/base1 ./
