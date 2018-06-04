@@ -2,8 +2,8 @@ FROM centos:centos7
 MAINTAINER Wu
 
 #
-ENV http_proxy=http://web-proxy.sgp.hpecorp.net:8080
-ENV https_proxy=http://web-proxy.sgp.hpecorp.net:8080
+# ENV http_proxy=http://web-proxy.sgp.hpecorp.net:8080
+# ENV https_proxy=http://web-proxy.sgp.hpecorp.net:8080
 ENV WORKDIR=/tmp/base1
 RUN mkdir $WORKDIR
 WORKDIR $WORKDIR
@@ -15,10 +15,10 @@ RUN yum -y install deltarpm
 RUN yum -y install wget
 
 # install getopt,ksh
-# used by install-uca-ebc.sh,so install them in advance.
+
 RUN yum -y install util-linux
 RUN yum -y install ksh
-# install initscripts for umb zookeeper 
+# 
 RUN yum install -y initscripts
 
 # install open jdk
@@ -32,14 +32,12 @@ RUN yum -y install openssh-clients
 RUN yum -y install telnet
 RUN yum -y install expect
 RUN yum -y install sshpass
+RUN yum -y install net-tools
 
 # install dev tools 
 
 RUN yum -y install git
 RUN yum -y install maven
-
-#LANG is missing?
-RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 
 ########################################
 # Configure ENV vars
@@ -49,12 +47,9 @@ RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh
 RUN echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
 
 # Configure http proxy
-RUN echo 'http_proxy=http://web-proxy.sgp.hpecorp.net:8080' | tee -a /etc/profile.d/http_proxy.sh
-RUN echo 'https_proxy=http://web-proxy.sgp.hpecorp.net:8080' | tee -a /etc/profile.d/http_proxy.sh
+# RUN echo 'http_proxy=http://web-proxy.sgp.hpecorp.net:8080' | tee -a /etc/profile.d/http_proxy.sh
+# RUN echo 'https_proxy=http://web-proxy.sgp.hpecorp.net:8080' | tee -a /etc/profile.d/http_proxy.sh
 
-
-#docker build --force-rm=true -t centos7/base1 ./
-RUN yum -y install net-tools
 #LANG is missing?
 RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 
