@@ -28,6 +28,7 @@ RUN yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel
 # install necessary common tools?
 RUN yum -y install unzip
 RUN yum -y install which 
+RUN yum -y install openssh-server
 RUN yum -y install openssh-clients
 RUN yum -y install telnet
 RUN yum -y install expect
@@ -38,6 +39,17 @@ RUN yum -y install net-tools
 
 RUN yum -y install git
 RUN yum -y install maven
+#
+# Configure sshd
+#
+RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.orig
+RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ecdsa_key/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config
+RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ed25519_key/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/' /etc/ssh/sshd_config
+RUN sed -ri '/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+RUN sed -ri '/AuthorizedKeysFile     .ssh\/authorized_keys/AuthorizedKeysFile     \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
+
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+RUN cat ~/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
 
 ########################################
 # Configure ENV vars
