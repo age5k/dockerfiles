@@ -50,6 +50,7 @@ RUN sed -ri '/AuthorizedKeysFile     .ssh\/authorized_keys/AuthorizedKeysFile   
 
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 RUN cat ~/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
+#TODO add service? /user/sbin/sshd
 
 ########################################
 # Configure ENV vars
