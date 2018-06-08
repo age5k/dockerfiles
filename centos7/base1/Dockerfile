@@ -89,4 +89,23 @@ RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 
 # END CONFIG ENV vars
 
+#################################
+# FIX systemctl issue, refer to below pages:
+# 	https://github.com/gdraheim/docker-systemctl-replacement
+# 	https://blog.centos.org/2015/12/fixing-centos-7-systemd-conflicts-with-docker/
+#################################
+# ADD systemctl.py $WORKDIR/systemctl.py
+# RUN mv /usr/bin/systemctl /usr/bin/systemctl.orig
+# RUN cp $WORKDIR/systemctl.py /usr/bin/systemctl
+# RUN chmod a+x /usr/bin/systemctl
+
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+#################################
+# End 
+#################################
 #docker build --force-rm=true -t centos7/base1 ./
+#docker run -itd -p 8022:22 -p 50070:50070  -p 50075:50075 -p 19888:19888 -p 8042:8042 -p 8088:8088 -p 8080:8080 -p 11000:11000 -p 10000:10000 -p 9999:9999 -p 9083:9083 --name hadoopa hadoopa:v20180608 bash 
+#docker run -itd -p 8022:22 -p 50070:50070  -p 50075:50075 -p 19888:19888 -p 8042:8042 -p 18088:18088 -p 8080:8080 -p 11000:11000 -p 10000:10000 -p 9999:9999 -p 9083:9083 --name hadoopa hadoopa:v20180608 bash 
