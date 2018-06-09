@@ -1,4 +1,4 @@
-FROM centos7/hadoop2a
+FROM centos7/hadoop3a
 MAINTAINER Wu
 
 # ENV varables.
@@ -13,6 +13,14 @@ WORKDIR $WORKDIR
 ######{LANG is missing?
 RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 ######}
+
+######{ START CONFIG ENV vars
+
+# 	Configure JAVA_HOME ENV
+RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh &&\
+	echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
+
+######} END CONFIG ENV vars
 
 ######{ BEGIN CONFIG sshd
 
@@ -32,14 +40,6 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa &&\
 #/usr/sbin/sshd
 ######} END CONFIG sshd
 
-######{ START CONFIG ENV vars
-
-# 	Configure JAVA_HOME ENV
-RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh &&\
-	echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
-
-######} END CONFIG ENV vars
-
 ##{
 # FIX systemctl issue, refer to below pages:
 # 	https://github.com/gdraheim/docker-systemctl-replacement
@@ -58,15 +58,8 @@ RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh &&
 ENV HADOOP_VERSION=2.9.1
 ENV USER_NAME=hadoop
 
-# add hadoop user,
-RUN useradd $USER_NAME &&\
-	chown -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\
-	chgrp -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\	
-	echo 'export HADOOP_HOME=/opt/hadoop' | tee -a /home/$USER_NAME.bashrc &&\
-	echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' | tee -a /home/$USER_NAME/.bashrc
-
 # 
-# Configure ssh
+# Configure ssh for user hadoop.
 #
 RUN mkdir /home/$USER_NAME/.ssh &&\
 	ssh-keygen -t rsa -P '' -f /home/$USER_NAME/.ssh/id_rsa &&\
