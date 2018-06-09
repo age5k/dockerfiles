@@ -26,7 +26,7 @@ RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ed25519_key/#HostKey \/etc\/ssh\/ssh
 #RUN sed -ri '/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 #authroized_keys file reconfigured as a common place. instead of each user's home folder,since centos cannot read them for crepted folder.
-RUN sed -ri '/AuthorizedKeysFile     .ssh\/authorized_keys/AuthorizedKeysFile     \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
+RUN sed -ri '\/AuthorizedKeysFile     .ssh\/authorized_keys/AuthorizedKeysFile     \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
 
 #generate key pair:
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
@@ -108,5 +108,5 @@ RUN chmod a+x /init.sh
 CMD /init.sh
 
 EXPOSE 1-65535
-
+# docker build --force-rm=true -t centos7/hadoop1c ./
 # docker run -itd -p 50010:50010 -p 50020:50020 -p 50075:50075 -p 50090:50090 -p 19888:19888 -p 8030:8030 -p 8031:8031 -p 8032:8032 -p 8033:8033 -p 8040:8040 -p 8042:8042 -p 8088:8088 -p 49707:49707 -p 2122:2122 --name hadoopa centos7/hadoop:2.9.1.ga bash
