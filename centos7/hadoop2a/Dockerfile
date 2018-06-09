@@ -17,6 +17,7 @@ RUN tar -xvf $WORKDIR/hadoop-${HADOOP_VERSION}.tar.gz -C /opt &&\
 	ln -s /opt/hadoop-${HADOOP_VERSION} /opt/hadoop &&\	
 	chown -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\
 	chgrp -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\
+	chmod a-x /opt/hadoop-${HADOOP_VERSION}/sbin/*.cmd &&\
 	echo 'export HADOOP_HOME=/opt/hadoop' | tee -a /home/$USER_NAME/.bashrc &&\
 	echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' | tee -a /home/$USER_NAME/.bashrc &&\
 	rm hadoop-${HADOOP_VERSION}.tar.gz
