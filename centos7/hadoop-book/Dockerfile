@@ -9,14 +9,13 @@ ENV USER_NAME=hadoop
 
 WORKDIR $WORKDIR
 USER $USER_NAME
-# get the tarball.
+# git 
 RUN cd  &&\
 	mkdir git &&\ 
  	cd git &&\
-	git clone https://github.com/tomwhite/hadoop-book.git &&\
-	cd hadoop-book &&\
-	mvn package -DskipTests
-
+	git clone https://github.com/tomwhite/hadoop-book.git
+	
+# hadoop config	
 RUN mkdir -p /home/$USER_NAME/opt/hadoop/etc &&\
 	cp -R /var/opt/hadoop/etc/hadoop /home/$USER_NAME/opt/hadoop/etc &&\
 	chown -R $USER_NAME /home/$USER_NAME/opt &&\
