@@ -1,4 +1,4 @@
-FROM centos7/hadoop3a
+FROM centos7/hadoop2a
 MAINTAINER Wu
 
 # ENV varables.
