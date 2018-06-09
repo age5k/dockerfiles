@@ -17,25 +17,16 @@ RUN echo 'LANG=en_US.UTF-8' >> /etc/bashrc
 ######{ BEGIN CONFIG sshd
 
 # backup orignal config:
-RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.orig
-#disable key types don't want,remain only rsa:
-RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ecdsa_key/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config
-RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ed25519_key/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/' /etc/ssh/sshd_config
+# authroized_keys file reconfigured as a common place. instead of each user's home folder,since centos cannot read them for crepted folder.
+RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.orig &&\
+	sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ecdsa_key/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/' /etc/ssh/sshd_config &&\
+	sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ed25519_key/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/' /etc/ssh/sshd_config &&\
+	sed -ri 's/.ssh\/authorized_keys/\/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
 
-# make sure public key auth enabled:
-#RUN sed -ri '/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-
-#authroized_keys file reconfigured as a common place. instead of each user's home folder,since centos cannot read them for crepted folder.
-RUN sed -ri 's/.ssh\/authorized_keys/\/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
-
-#generate key pair:
-RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-
-#register the pub key for root:
-RUN cat ~/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
-
-#use the key as the host key:
-RUN cp ~/.ssh/id_rsa /etc/ssh/ssh_host_rsa_key
+#generate key pair for root,and for host as the same private key:
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa &&\
+	cat ~/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys &&\
+	cp ~/.ssh/id_rsa /etc/ssh/ssh_host_rsa_key
 
 #TODO add service? /user/sbin/sshd
 #/usr/sbin/sshd
@@ -44,8 +35,8 @@ RUN cp ~/.ssh/id_rsa /etc/ssh/ssh_host_rsa_key
 ######{ START CONFIG ENV vars
 
 # 	Configure JAVA_HOME ENV
-RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh
-RUN echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
+RUN echo 'export JAVA_HOME=/usr/lib/jvm/java' | tee -a /etc/profile.d/java.sh &&\
+	echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
 
 ######} END CONFIG ENV vars
 
@@ -67,7 +58,7 @@ RUN echo 'export PATH=$PATH:$JAVA_HOME/bin' | tee -a /etc/profile.d/java.sh
 ENV HADOOP_VERSION=2.9.1
 ENV USER_NAME=hadoop
 
-# add hadoop user,mv to 
+# add hadoop user,
 RUN useradd $USER_NAME &&\
 	chown -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\
 	chgrp -R $USER_NAME /opt/hadoop-${HADOOP_VERSION} &&\	
