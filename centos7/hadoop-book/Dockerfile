@@ -21,8 +21,8 @@ RUN mkdir -p /home/$USER_NAME/opt/hadoop/etc &&\
 	cp -R /var/opt/hadoop/etc/hadoop /home/$USER_NAME/opt/hadoop/etc &&\
 	chown -R $USER_NAME /home/$USER_NAME/opt &&\
 	chgrp -R $USER_NAME /home/$USER_NAME/opt &&\
-	echo 'export HADOOP_CONF_DIR=/home/opt/hadoop/etc/hadoop2' | tee -a /home/$USER_NAME/.bashrc
-	echo 'export HADOOP_CLASSPATH=/home/$USER_NAME/git/hadoop-book/hadoop-examples/target/max-temp-workflow/lib/hadoop-examples.jar' | tee -a /home/$USER_NAME/.bashrc &&\
+	echo 'export HADOOP_CONF_DIR=/home/opt/hadoop/etc/hadoop2' | tee -a /home/$USER_NAME/.bashrc &&\ 
+	echo 'export HADOOP_CLASSPATH=/home/$USER_NAME/git/hadoop-book/hadoop-examples/target/max-temp-workflow/lib/hadoop-examples.jar' | tee -a /home/$USER_NAME/.bashrc
 EXPOSE 1-65535
 
 # docker build --force-rm=true -t centos7/hadoop-book ./
