@@ -13,7 +13,7 @@ USER $USER_NAME
 RUN cd  &&\
 	mkdir git &&\ 
  	cd git &&\
-	get clone https://github.com/tomwhite/hadoop-book.git &&\
+	git clone https://github.com/tomwhite/hadoop-book.git &&\
 	cd hadoop-book &&\
 	mvn package -DskipTests
 
