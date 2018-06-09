@@ -26,7 +26,7 @@ RUN sed -ri 's/HostKey \/etc\/ssh\/ssh_host_ed25519_key/#HostKey \/etc\/ssh\/ssh
 #RUN sed -ri '/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 #authroized_keys file reconfigured as a common place. instead of each user's home folder,since centos cannot read them for crepted folder.
-RUN sed -ri '\/AuthorizedKeysFile     .ssh\/authorized_keys/AuthorizedKeysFile     \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
+RUN sed -ri 's/.ssh\/authorized_keys/\/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
 
 #generate key pair:
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
@@ -35,7 +35,7 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 RUN cat ~/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
 
 #use the key as the host key:
-RUN cp ~/.ssh/id_rsa >> /etc/ssh/ssh_host_rsa_key
+RUN cp ~/.ssh/id_rsa /etc/ssh/ssh_host_rsa_key
 
 #TODO add service? /user/sbin/sshd
 #/usr/sbin/sshd
@@ -88,8 +88,11 @@ RUN echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' | tee -a /home/$
 # 
 # Configure ssh
 #
-
+RUN mkdir /home/$USER_NAME/.ssh
 RUN ssh-keygen -t rsa -P '' -f /home/$USER_NAME/.ssh/id_rsa
+RUN chown -R $USER_NAME /home/$USER_NAME/.ssh
+RUN chgrp -R $USER_NAME /home/$USER_NAME/.ssh
+
 RUN cat /home/$USER_NAME/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
 
 ###
