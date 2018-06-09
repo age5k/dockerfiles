@@ -66,6 +66,20 @@ RUN mkdir /home/$USER_NAME/.ssh &&\
 	chown -R $USER_NAME /home/$USER_NAME/.ssh &&\
 	chgrp -R $USER_NAME /home/$USER_NAME/.ssh &&\
 	cat /home/$USER_NAME/.ssh/id_rsa.pub >> /etc/ssh/authorized_keys
+# add hadoop config xml files.	
+COPY hadoop hadoop
+###
+# var for hadoop.
+###
+RUN mkdir -p /var/opt/hadoop-${HADOOP_VERSION} &&\
+	ln -s /var/opt/hadoop-${HADOOP_VERSION} /var/opt/hadoop &&\
+	mkdir -p /var/opt/hadoop/etc &&\
+	cp -R /opt/hadoop/etc/hadoop /var/opt/hadoop/etc &&\
+	cp hadoop/*.* /var/opt/hadoop/etc/hadoop &&\
+	chown -R $USER_NAME /var/opt/hadoop &&\
+	chgrp -R $USER_NAME /var/opt/hadoop &&\
+	echo 'export HADOOP_CONF=/var/opt/hadoop/etc/hadoop' | tee -a /home/$USER_NAME/.bashrc &&\
+	echo 'export HADOOP_LOG_DIR=/var/opt/hadoop/logs' | tee -a /home/$USER_NAME/.bashrc
 
 ###
 # TODO fix 8088 web port issue,see:
@@ -75,9 +89,9 @@ RUN mkdir /home/$USER_NAME/.ssh &&\
 #  <value>0.0.0.0:8088</value>
 # </property>
 ###
-#################################
-# Configurations Step 3,init command
-#################################
+###
+# TODO Configurations Step 3,init command,run sshd at start-up.
+###
 #ADD init.sh /init.sh
 #RUN chmod a+x /init.sh
 #CMD /init.sh
