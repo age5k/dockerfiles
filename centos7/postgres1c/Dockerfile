@@ -7,10 +7,24 @@ ENV WORKDIR=/tmp/wk
 
 WORKDIR $WORKDIR
 
-# install postgres
+##{
+# FIX systemctl issue, refer to below pages:
+# 	https://github.com/gdraheim/docker-systemctl-replacement
+# 	https://blog.centos.org/2015/12/fixing-centos-7-systemd-conflicts-with-docker/
+#
+ADD systemctl.py $WORKDIR/systemctl.py
+RUN mv /usr/bin/systemctl /usr/bin/systemctl.orig &&\
+	cp $WORKDIR/systemctl.py /usr/bin/systemctl &&\
+	chmod a+x /usr/bin/systemctl
+##}
 
-RUN echo "listen_addresses = \'*\'" >> /var/lib/pgsql/data/postgresql.conf
-RUN postgresql-setup initdb
+##{ install postgres
+
+RUN echo "listen_addresses = \'*\'" >> /var/lib/pgsql/data/postgresql.conf &&\
+	postgresql-setup initdb &&\
+	systemctl enable postgresql
+##}
+
 EXPOSE 1-65535
 
 # docker build --force-rm=true -t centos7/postgres1c ./
