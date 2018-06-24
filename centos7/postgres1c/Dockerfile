@@ -20,8 +20,8 @@ RUN mv /usr/bin/systemctl /usr/bin/systemctl.orig &&\
 
 ##{ install postgres
 
-RUN echo "listen_addresses = \'*\'" >> /var/lib/pgsql/data/postgresql.conf &&\
-	postgresql-setup initdb &&\
+RUN postgresql-setup initdb &&\
+	echo "listen_addresses = '*'" >> /var/lib/pgsql/data/postgresql.conf &&\
 	systemctl enable postgresql
 ##}
 
