@@ -1,4 +1,4 @@
-FROM centos7/postgres1a
+FROM centos7/postgres2a
 MAINTAINER Wu
 
 # ENV varables.
@@ -39,4 +39,3 @@ EXPOSE 1-65535
 # docker build --force-rm=true -t centos7/postgres1c ./
 # docker run -itd -p 5432:5432 --name postgres1cA centos7/postgres1c bash
 # docker exec -it postgres1cA bash
-# docker run -p 80:80 -e "PGADMIN_DEFAULT_EMAIL=user@domain.com" -e "PGADMIN_DEFAULT_PASSWORD=SuperSecret" -d dpage/pgadmin4
